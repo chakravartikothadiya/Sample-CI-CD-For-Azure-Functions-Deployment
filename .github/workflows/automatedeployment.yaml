@@ -43,4 +43,7 @@ jobs:
           publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
           scm-do-build-during-deployment: true
           enable-oryx-build: true
+        env:
+          ENV_TEST_ONE: "Chakravarti"
+          ENV_TEST_TWO: "Kothadiya"
 # For more samples to get started with GitHub Action workflows to deploy to Azure, refer to https://github.com/Azure/actions-workflow-samples
