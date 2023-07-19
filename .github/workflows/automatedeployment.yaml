@@ -13,6 +13,8 @@ env:
   AZURE_FUNCTIONAPP_NAME: "app-testinggithubactions-azure-function" # set this to your function app name on Azure
   AZURE_FUNCTIONAPP_PACKAGE_PATH: "." # set this to the path to your function app project, defaults to the repository root
   PYTHON_VERSION: "3.9" # set this to the python version to use (e.g. '3.6', '3.7', '3.8')
+  ENV_TEST_ONE: "Chakravarti" # Add your environment variables here
+  ENV_TEST_TWO: "Kothadiya"
 
 jobs:
   build-and-deploy:
@@ -34,6 +36,20 @@ jobs:
           pip install -r requirements.txt --target=".python_packages/lib/site-packages"
           popd
 
+      - name: "Set Azure Function App Environment Variables"
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
+        env:
+          AZURE_FUNCTIONAPP_NAME: ${{ env.AZURE_FUNCTIONAPP_NAME }}
+
+      - name: "Set Azure Function App Settings"
+        uses: azure/CLI@v1
+        with:
+          azcliversion: 2.28.0
+          inlineScript: |
+            az functionapp config appsettings set --name $AZURE_FUNCTIONAPP_NAME --resource-group test-azure-functions --settings "ENV_TEST_ONE=${{ env.ENV_TEST_ONE }}" "ENV_TEST_TWO=${{ env.ENV_TEST_TWO }}"
+
       - name: "Run Azure Functions Action"
         uses: Azure/functions-action@v1
         id: fa
@@ -43,7 +59,4 @@ jobs:
           publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
           scm-do-build-during-deployment: true
           enable-oryx-build: true
-        env:
-          ENV_TEST_ONE: "Chakravarti"
-          ENV_TEST_TWO: "Kothadiya"
 # For more samples to get started with GitHub Action workflows to deploy to Azure, refer to https://github.com/Azure/actions-workflow-samples
