@@ -36,19 +36,19 @@ jobs:
           pip install -r requirements.txt --target=".python_packages/lib/site-packages"
           popd
 
-      # - name: "Set Azure Function App Environment Variables"
-      #   uses: azure/login@v1
-      #   with:
-      #     creds: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
-      #   env:
-      #     AZURE_FUNCTIONAPP_NAME: ${{ env.AZURE_FUNCTIONAPP_NAME }}
+      - name: "Set Azure Function App Environment Variables"
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+        env:
+          AZURE_FUNCTIONAPP_NAME: ${{ env.AZURE_FUNCTIONAPP_NAME }}
 
-      # - name: "Set Azure Function App Settings"
-      #   uses: azure/CLI@v1
-      #   with:
-      #     azcliversion: 2.28.0
-      #     inlineScript: |
-      #       az functionapp config appsettings set --name $AZURE_FUNCTIONAPP_NAME --resource-group test-azure-functions --settings "ENV_TEST_ONE=${{ env.ENV_TEST_ONE }}" "ENV_TEST_TWO=${{ env.ENV_TEST_TWO }}"
+      - name: "Set Azure Function App Settings"
+        uses: azure/CLI@v1
+        with:
+          azcliversion: 2.28.0
+          inlineScript: |
+            az functionapp config appsettings set --name $AZURE_FUNCTIONAPP_NAME --resource-group azure-function-github-actions-test --settings "ENV_TEST_ONE=${{ env.ENV_TEST_ONE }}" "ENV_TEST_TWO=${{ env.ENV_TEST_TWO }}"
 
       - name: "Run Azure Functions Action"
         uses: Azure/functions-action@v1
