@@ -42,7 +42,7 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - run: |
-          cat env_variables.json | jq -r 'to_entries | .[] | "az functionapp config appsettings set --name ${{ env.AZURE_FUNCTIONAPP_NAME }} --resource-group azure-function-github-actions-test --settings \"\(.key)=\(.value)\""' | sh
+          cat env_var.json | jq -r 'to_entries | .[] | "az functionapp config appsettings set --name ${{ env.AZURE_FUNCTIONAPP_NAME }} --resource-group azure-function-github-actions-test --settings \"\(.key)=\(.value)\""' | sh
 
       # az functionapp config appsettings set --name ${{ env.AZURE_FUNCTIONAPP_NAME }} --resource-group azure-function-github-actions-test --settings "YOUR_ENV_VAR_1=${{ env.ENV_TEST_ONE }}" "YOUR_ENV_VAR_2=${{ env.ENV_TEST_TWO }}"
 
